@@ -1,3 +1,0 @@
-[submodule "back-end"]
-	path = back-end
-	url = https://github.com/parkernilson/gene-comparison-backend.git
