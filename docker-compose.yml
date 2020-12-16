@@ -3,7 +3,7 @@ services:
   back-end:
     ports:
       - 5000:5000
-    build: back-end
+    build: flask-app
     environment:
       ENV: production
       FLASK_APP: /code/server.py
