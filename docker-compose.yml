@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  back-end:
+  flask-app:
     ports:
       - 5000:5000
     build: flask-app
@@ -8,3 +8,4 @@ services:
       ENV: production
       FLASK_APP: /code/server.py
       FLASK_ENV: production 
+    restart: unless-stopped
