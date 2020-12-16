@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    font-family: Montserrat, sans-serif;
+}
+
+.content {
+    max-width: 960px;
+    flex: 1;
+    margin: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+}
