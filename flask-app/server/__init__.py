@@ -3,68 +3,54 @@ import os
 from flask import Flask, request, flash, redirect, send_from_directory, url_for, render_template
 import matplotlib.pylab as plt
 
-from .src import apply_style_transfer, save_image
+from .functions import apply_style_transfer, save_image
+from .functions.parse_post_images import parse_post_images
 
 # initialize flask app
 app = Flask(__name__)
 
+# Configure app
 RESULTS_FOLDER = '/results'
-ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png']
-
 app.config['RESULTS_FOLDER'] = RESULTS_FOLDER
 app.config['SECRET_KEY'] = "b879ab3$$lskjb"
 
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=['GET'])
 def home():
     """ Display the home page template """
     return render_template('style-transfer.html')
 
-def parse_post_images(request):
-    # get the content and style images from the post request, and validate them
-    if 'content_image' not in request.files or 'style_image' not in request.files:
-        raise 'Content image or style image were not present in the request.'
-
-    content_image_file = request.files['content_image']
-    style_image_file = request.files['style_image']
-
-    if content_image_file.filename == '' or style_image_file.filename == '':
-        raise 'A file was not selected for either the content image or the style image'
-
-    if content_image_file and allowed_file(content_image_file.filename) \
-        and style_image_file and allowed_file(style_image_file.filename):
-        return content_image_file, style_image_file
-    else:
-        raise 'Something went wrong while parsing the given images'
 
 @app.route('/style-transfer', methods=['POST'])
 def style_transfer():
     """ Perform style transfer on given content and style images """
+
+    # check to see that the images given in the post request are valid
     try:
         content_image_file, style_image_file = parse_post_images(request)
-
-        # perform style transfer on them using style_transfer method
-        stylized_image = apply_style_transfer(content_image_file, style_image_file)
-
-        # save the resulting image to a static image directory
-        result_filename = save_image(stylized_image, app)
-
-        # redirect user to the resulting image
-        return redirect(url_for('results', filename=result_filename))
     except error:
+        # if the given images are not valid, flash an error and redirect to home
         flash(error)
         return redirect('/')
+
+    # perform style transfer on them using style_transfer method
+    stylized_image = apply_style_transfer(content_image_file, style_image_file)
+
+    # save the resulting image to a static image directory
+    result_filename = save_image(stylized_image, app)
+
+    # redirect user to the resulting image
+    return redirect(url_for('results', filename=result_filename))
+
 
 @app.route('/results/<filename>')
 def results(filename):
     """ Perform static file serving for the stylized result images """
     return send_from_directory(app.config["RESULTS_FOLDER"], filename)
 
+
 @app.after_request
-def add_header(r):
+def dont_cache_dev_files(r):
     """ If in development environment, tell browser not to cache files """
     if os.environ["ENV"] == "development":
         r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -72,6 +58,7 @@ def add_header(r):
         r.headers["Expires"] = "0"
         r.headers['Cache-Control'] = 'public, max-age=0'
     return r
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
