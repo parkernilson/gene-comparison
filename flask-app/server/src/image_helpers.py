@@ -62,16 +62,3 @@ def save_image(img, flask_app):
     plt.imsave(os.path.join(flask_app.config["RESULTS_FOLDER"], result_filename), img)
 
     return result_filename
-
-def show_n(images, titles=('',)):
-    n = len(images)
-    image_sizes = [image.shape[1] for image in images]
-    w = (image_sizes[0] * 6) // 320
-    plt.figure(figsize=(w  * n, w))
-    gs = gridspec.GridSpec(1, n, width_ratios=image_sizes)
-    for i in range(n):
-        plt.subplot(gs[i])
-        plt.imshow(images[i][0], aspect='equal')
-        plt.axis('off')
-        plt.title(titles[i] if len(titles) > i else '')
-    plt.show()

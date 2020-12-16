@@ -20,36 +20,43 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET'])
 def home():
+    """ Display the home page template """
     return render_template('style-transfer.html')
+
+def parse_post_images(request):
+    # get the content and style images from the post request, and validate them
+    if 'content_image' not in request.files or 'style_image' not in request.files:
+        raise 'Content image or style image were not present in the request.'
+
+    content_image_file = request.files['content_image']
+    style_image_file = request.files['style_image']
+
+    if content_image_file.filename == '' or style_image_file.filename == '':
+        raise 'A file was not selected for either the content image or the style image'
+
+    if content_image_file and allowed_file(content_image_file.filename) \
+        and style_image_file and allowed_file(style_image_file.filename):
+        return content_image_file, style_image_file
+    else:
+        raise 'Something went wrong while parsing the given images'
 
 @app.route('/style-transfer', methods=['POST'])
 def style_transfer():
     """ Perform style transfer on given content and style images """
+    try:
+        content_image_file, style_image_file = parse_post_images(request)
 
-    # get the content and style images from the post request, and validate them
-    if 'content_image' not in request.files or 'style_image' not in request.files:
-        flash('Content image or style image were not present in the request.')
+        # perform style transfer on them using style_transfer method
+        stylized_image = apply_style_transfer(content_image_file, style_image_file)
+
+        # save the resulting image to a static image directory
+        result_filename = save_image(stylized_image, app)
+
+        # redirect user to the resulting image
+        return redirect(url_for('results', filename=result_filename))
+    except error:
+        flash(error)
         return redirect('/')
-    content_image_file = request.files['content_image']
-    style_image_file = request.files['style_image']
-    if content_image_file.filename == '' or style_image_file.filename == '':
-        flash('A file was not selected for either the content image or the style image')
-        return redirect('/')
-    if content_image_file and allowed_file(content_image_file.filename) \
-        and style_image_file and allowed_file(style_image_file.filename):
-
-            # perform style transfer on them using style_transfer method
-            stylized_image = apply_style_transfer(content_image_file, style_image_file)
-
-            # save the resulting image to a static image directory
-            result_filename = save_image(stylized_image, app)
-
-            # redirect user to the resulting image
-            return redirect(url_for('results', filename=result_filename))
-    return '''
-    <!doctype html>
-    <h1>Something went wrong...</h1>
-    '''
 
 @app.route('/results/<filename>')
 def results(filename):
@@ -58,9 +65,7 @@ def results(filename):
 
 @app.after_request
 def add_header(r):
-    """
-    If in development environment, tell browser not to cache files
-    """
+    """ If in development environment, tell browser not to cache files """
     if os.environ["ENV"] == "development":
         r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
         r.headers["Pragma"] = "no-cache"

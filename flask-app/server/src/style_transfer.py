@@ -1,7 +1,7 @@
 import tensorflow as tf
 import tensorflow_hub as hub
 
-from .image_helpers import crop_center, load_image, show_n
+from .image_helpers import crop_center, load_image
 
 style_transfer_hub_handle = 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'
 
