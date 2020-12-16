@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  back-end:
+    ports:
+      - 5000:5000
+    build: back-end
+    environment:
+      ENV: development
+      FLASK_APP: /code/server.py
+      FLASK_ENV: development
+    volumes:
+      - ./back-end:/code
+  front-end:
+    ports:
+      - 5001:8080
+    build: front-end
+    volumes:
+      - ./front-end/src/:/code/src
+    entrypoint: [ "npm", "run", "dev-server" ]
+    depends_on: 
+      - back-end
+    links:
+      - back-end

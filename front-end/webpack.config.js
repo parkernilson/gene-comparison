@@ -61,12 +61,11 @@ module.exports = {
 	devServer: {
 		host: '0.0.0.0', 
 		proxy: {
-			'/content': {
-				target: 'http://strapi:1337/',
-				pathRewrite: {'^/content': ''}
+			'/style-transfer': {
+				target: 'http://back-end:5000/'
 			},
-			'/uploads': {
-				target: 'http://strapi:1337/'
+			'/results': {
+				target: 'http://back-end:5000/'
 			}
 		}
 	}

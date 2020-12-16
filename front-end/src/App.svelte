@@ -19,5 +19,10 @@
 </svelte:head>
 
 <ContentColumn>
-	<h1>Gene Sequence Comparisons</h1>
+	<h1>Style Transfer</h1>
+	<form method="POST" enctype="multipart/form-data" action="/style-transfer">
+		<input type="file" name="content_image">
+		<input type="file" name="style_image">
+		<input type="submit" value="Compute Style Transfer">
+	</form>
 </ContentColumn>
