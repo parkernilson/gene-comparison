@@ -2,9 +2,17 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
-<section class="content">
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<div class="bg-overlay">
+  <section class="content">
+    <div class="main-content">
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </div>
+    <div class="lower-content">
+      <div class="photo-credit" style="">Background Photo by <a href="https://unsplash.com/@worldsbetweenlines?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Patrick Hendry</a> on <a href="https://unsplash.com/s/photos/painting?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></div>
+    </div>
+  </section>
+</div>

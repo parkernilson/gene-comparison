@@ -3,8 +3,18 @@
 {% block content %}
     <h1>Style Transfer</h1>
 	<form method="POST" enctype="multipart/form-data" action="/style-transfer">
-		<input type="file" name="content_image">
-		<input type="file" name="style_image">
-		<input type="submit" value="Compute Style Transfer">
+		<div class="image-selection">
+			<div class="image-select-component">
+				<label for="content_image">Content Image</label>
+				<input type="file" id="content_image" name="content_image">
+			</div>
+			<div class="image-select-component">
+				<label for="style_image">Style Image</label>
+				<input type="file" id="style_image" name="style_image">
+			</div>
+			<div class="submit-container">
+				<input type="submit" value="Compute Style Transfer">
+			</div>
+		</div>
 	</form>
 {% endblock %}

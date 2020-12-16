@@ -1,12 +1,91 @@
 body {
     margin: 0;
+    height: 100vh;
+    box-sizing: border-box;
     font-family: Montserrat, sans-serif;
+    background-image: url('/static/red-rocks-cropped-small.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+}
+
+a {
+    color: white;
+}
+
+.bg-overlay {
+    background-color: rgba(0, 0, 0, 0.35);
+    height: 100%;
+}
+
+.image-selection {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+label {
+    margin-bottom: 12px;
+}
+
+.image-select-component {
+    margin-top: 42px;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+}
+
+.submit-container {
+    margin-top: 42px;
+    display: flex;
+    align-items: center;
+}
+
+@media only screen and (max-width: 960px) {
+    .image-select-component {
+        width: 50%;
+    }
+
+    .submit-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .image-select-component {
+        width: 100%;
+    }
+}
+
+.photo-credit {
+    font-size: 16px;
+    margin-bottom: 12px;
+    padding: 12px;
+    text-align: right;
 }
 
 .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    box-sizing: border-box;
+
+    padding-top: 64px;
     max-width: 960px;
     flex: 1;
     margin: auto;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+h1 {
+    font-size: 72px;
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 11vw;
+    }
 }
