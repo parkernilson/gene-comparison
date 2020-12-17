@@ -52,12 +52,15 @@ def results(filename):
 @app.after_request
 def dont_cache_dev_files(r):
     """ If in development environment, tell browser not to cache files """
-    if os.environ["ENV"] == "development":
-        r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-        r.headers["Pragma"] = "no-cache"
-        r.headers["Expires"] = "0"
-        r.headers['Cache-Control'] = 'public, max-age=0'
-    return r
+    try:
+        if os.environ["ENV"] == "development":
+            r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            r.headers["Pragma"] = "no-cache"
+            r.headers["Expires"] = "0"
+            r.headers['Cache-Control'] = 'public, max-age=0'
+        return r
+    except:
+        return r
 
 
 if __name__ == "__main__":
